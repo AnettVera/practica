@@ -1,0 +1,39 @@
+services:
+  frontend:
+    # cambiar nombre imagen
+    image: client:v1.0.3
+    build:
+      context: ./client
+      args:
+        API_HOST: localhost
+        # el backend queda expuesto en el host en 8086 para evitar conflicto con 8080/8081
+        API_PORT: 8086
+        # cambiar url 
+        API_BASE: /api/controller
+    container_name: exu-cliente
+    ports:
+    # mapear puerto 3000 al puerto 80 del contenedor
+      - "5173:80"
+    networks:
+    # crear red con el comando docker network create --driver bridge sgu2-net
+    # cambiar nombre de red
+      - exu-ayvc-net
+  backend:
+  # cambiar nombre imagen 
+    image: operations:v1.0.3
+    build:
+      context: ./service
+    container_name: exu-operaciones
+    environment:
+      SERVER_PORT: 8080
+    ports:
+      # expone el 8080 interno en el 8086 del host para no chocar con otros servicios
+      - "8086:8080"
+    networks:
+      - exu-ayvc-net
+    depends_on:
+      - frontend
+
+networks:
+  exu-ayvc-net:
+    external: true
