@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         PROJECT_NAME = "exu-ayvc"
-        COMPOSE_PROJECT = "exu-ayvc"     
+        COMPOSE_PROJECT = "exu-ayvc"
         NETWORK_NAME = "exu-ayvc-net"
     }
 
@@ -35,27 +35,6 @@ pipeline {
         stage('Obteniendo actualizacion del código') {
             steps {
                 checkout scm
-            }
-        }
-
-        stage('Construyendo Backend (Maven)') {
-            steps {
-                dir('service') {
-                    bat """
-                        mvn clean package -DskipTests
-                    """
-                }
-            }
-        }
-
-        stage('Construyendo Frontend (Node/Vite)') {
-            steps {
-                dir('client') {
-                    bat """
-                        npm install
-                        npm run build
-                    """
-                }
             }
         }
 
